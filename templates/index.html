@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntellClass</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.css">
+    <!---->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.6/billboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.6/billboard.min.css" />
+    <style>
+        .app-title {
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    padding: 0;
+}
+        .navbar-fixed-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #202124;
+        }
+
+        .container {
+            margin-top: 100px; /* Ajusté pour éviter le chevauchement avec la navbar */
+        }
+
+        h1 {
+            font-weight: bold;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #5f6368;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+            font-size: 1.1em;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-control-inline {
+            width: 60%;
+            display: inline-block;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary {
+            background-color: #5f6368;
+            border-color: #5f6368;
+            font-size: 1.1em;
+            padding: 10px 20px;
+        }
+
+        .carousel-caption {
+            color: #202124;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            position: relative;
+            top: 0;
+            transform: translateY(0);
+        }
+
+        .carousel-caption h5 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .carousel-caption p {
+            font-size: 1.2em;
+            color: #5f6368;
+        }
+
+        a {
+            display: block;
+            margin-top: 30px;
+            font-size: 1em;
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .left-side {
+            text-align: left;
+        }
+
+        .right-side {
+            text-align: right;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .carousel-item {
+            text-align: center;
+        }
+
+        .carousel-caption {
+            position: static;
+            margin-top: 10px;
+        }
+
+        .carousel-inner .carousel-item img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .containervid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .video-containervid {
+            position: relative;
+        }
+
+        img {
+            width: 600px;
+            height: 338px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .timer {
+            font-size: 24px;
+            color: #202124;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            background: #f1f3f4;
+        }
+
+        .bodyApp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .summary-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .text-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .chart-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 200px; /* Adjust height as needed */
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center p-0" href="#">
+                <span class="p-0 app-title">IntellClass</span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link d-flex align-items-center p-0" href="#">
+                            <span class="p-0">IIT-Sfax</span>
+                            <img src="https://res.cloudinary.com/dr8g1jmly/image/upload/v1717780212/iit_e3zsn1.jpg" alt="Image de Ali Ali" class="rounded-circle ml-2" style="width: 30px; height: 30px;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- page 1  -->
+<section id="page1">
+    <div class="container">
+        <br> <br>
+        <div class="row">
+            <div class="col-md-6 left-side">
+                <h1>Appels vidéo </h1><h1>et visioconférences </h1>
+                <p>Communiquez, collaborez et célébrez les réussites éducatives où que vous soyez avec IntellClass.</p>
+                <button class="btn btn-primary btn-lg" id="startRecord">
+    <i class="fas fa-video"></i> Nouvelle réunion
+</button>
+
+
+            </div>
+            <div class="col-md-6 right-side">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://res.cloudinary.com/dr8g1jmly/image/upload/v1717782401/pexels-shvetsa-4226140_hseinx.jpg" alt="Image 1">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>IntellClass</h5>
+                                <p>Une plateforme d'éducation en ligne innovante qui utilise l'intelligence artificielle pour analyser la concentration des étudiants et générer des rapports de concentration en temps réel.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://res.cloudinary.com/dr8g1jmly/image/upload/v1717782399/pexels-mikhail-nilov-9159651_d4yf9c.jpg" alt="Image 2">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Model TYHANET-92</h5>
+                                <p>Dans notre application, nous surveillons la concentration des étudiants en temps réel grâce à des technologies avancées, offrant ainsi des rapports précis et personnalisés pour optimiser leur apprentissage.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://res.cloudinary.com/dr8g1jmly/image/upload/v1717782395/pexels-mikhail-nilov-9159669_bqtkov.jpg" alt="Image 3">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Focus / NoFocus ! </h5>
+                                <p>Notre application intègre un modèle de pointe qui classe instantanément les étudiants en état de concentration ou de distraction.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+ <!--page 2  -->
+<section class="bodyApp" id="page2" style="display: none;">
+    <div class="containervid">
+        <div class="video-containervid">
+
+                <img id="videoStream" src="{{ url_for('video_feed') }}"  >
+
+        </div>
+        <div class="timer" id="timer">01:00</div>
+    </div>
+</section>
+<!-- page 3  -->
+<section id="page3" style="display: none;">
+    <div class="container">
+        <br><br>
+        <div class="btn-container d-flex justify-content-end">
+            <h5 class="mr-auto">Rapport de concentration</h5>
+            <button id="downloadPdfBtn" class="btn btn-primary">
+                <i class="fas fa-file-pdf"></i> Télécharger le résumé en PDF
+            </button>
+        </div>
+
+        <!-- Afficher le résumé -->
+        <div class="summary-container" id="summary">
+            <div class="text-section">
+                <p>Partie 1: min 00:00 - min 00:15 => <span id="res1"></span></p>
+                <p>Partie 2: min 00:15 - min 00:30 => <span id="res2"></span></p>
+                <p>Partie 3: min 00:30 - min 00:45 => <span id="res3"></span></p>
+                <p>Partie 4: min 00:45 - min 01:00 => <span id="res4"></span></p>
+                <div class="btn-container">
+                    <a href="new_meeting.html" id="newMeetingBtn" class="btn btn-secondary">Nouvelle Réunion</a>
+                </div>
+            </div>
+            <div class="chart-section">
+                <div id="predict"></div>
+            </div>
+        </div>
+        <br> <br> <br>
+    </div>
+</section>
+
+
+
+
+
+
+    <footer class="footer">
+        <div>
+            <span class="text-muted">&copy; 2024 - IntellClass. Tous droits réservés.</span>
+        </div>
+    </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.5.10/billboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+            let timerElement = document.getElementById('timer');
+            let time = 70;
+            let interval = setInterval(() => {
+                let minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                time--;
+
+                if (time === 14) {
+                    Swal.fire({
+                        title: 'Attention',
+                        text: 'La séance va se terminer dans 15 secondes.',
+                        position: 'bottom-end',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        toast: true,
+                        background: '#ffc107',
+                        color: '#000',
+                        timerProgressBar: true
+                    });
+                }
+
+                if (time < 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = "00:00";
+                    Swal.fire({
+                        title: 'Terminer',
+                        text: 'En cours de génération du rapport.',
+                        position: 'bottom-end',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        toast: true,
+                        background: '#28a745',
+                        color: '#fff',
+                        timerProgressBar: true
+                    });
+                }
+            }, 1000);
+        });
+
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
+    <script>
+        document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+    Swal.fire({
+        title: 'Entrer les noms',
+        html:
+            '<input id="teacherName" class="swal2-input" placeholder="Nom et Prénom de l\'enseignant">' +
+            '<input id="studentName" class="swal2-input" placeholder="Nom et Prénom de l\'étudiant">',
+        focusConfirm: false,
+        preConfirm: () => {
+            const teacherName = document.getElementById('teacherName').value.trim();
+            const studentName = document.getElementById('studentName').value.trim();
+
+            // Vérifier si les champs sont vides
+            if (!teacherName || !studentName) {
+                Swal.showValidationMessage('Veuillez remplir tous les champs.');
+                return false;
+            }
+
+            // Retourner les valeurs si tout est correct
+            return [teacherName, studentName];
+        }
+    }).then(async (result) => {
+            if (result.isConfirmed) {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                const res1Text = document.getElementById('res1')?.textContent || '';
+                const res2Text = document.getElementById('res2')?.textContent || '';
+                const res3Text = document.getElementById('res3')?.textContent || '';
+                const res4Text = document.getElementById('res4')?.textContent || '';
+
+                // Charger l'image de fond
+                const imageUrl = 'https://res.cloudinary.com/dr8g1jmly/image/upload/v1717864765/pdf_final_hiy0vz.jpg';
+                const image = new Image();
+                image.src = imageUrl;
+                await image.decode();
+
+                doc.addImage(image, 'JPEG', 0, 0, 210, 297); // Ajouter l'image de fond à la taille A4
+
+                // Ajouter les en-têtes
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.text('Nom de l\'application : IntelliClass', 10, 10); // Positionner à droite
+
+                doc.text('Nom de l\'université: IIT-Sfax', 150, 10);
+
+                // Définir les styles et ajouter des éléments graphiques
+                doc.setTextColor(255, 0, 0);
+                doc.setFontSize(18);
+                doc.text('Rapport de concentration', 10, 30);
+
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.text('Nom et Prénom de l\'enseignant: ' + result.value[0], 10, 40);
+                doc.text('Nom et Prénom l\'étudiant: ' + result.value[1], 10, 50);
+
+
+                doc.setTextColor(0, 0, 255);
+                doc.setFontSize(14);
+                doc.text('Détails de concentration :', 15, 67);
+
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.text('Partie 1: min 00:00 - min 00:15 => ' + res1Text, 20, 80);
+                doc.text('Partie 2: min 00:15 - min 00:30 => ' + res2Text, 20, 90);
+                doc.text('Partie 3: min 00:30 - min 00:45 => ' + res3Text, 20, 100);
+                doc.text('Partie 4: min 00:45 - min 01:00 => ' + res4Text, 20, 110);
+
+
+
+
+                doc.save('resume.pdf');
+            }
+        });
+    });
+
+
+    </script>
+
+
+    <script>
+        // hethy ll btn mta nouveau ruenon
+        $(document).ready(function() {
+            $('#newMeetingBtn').click(function(event) {
+                event.preventDefault(); // Empêche le comportement par défaut du lien
+                $('#page2').hide();
+                $('#page3').hide();
+                $('#page1').show();
+            });
+        });
+    </script>
+
+<script>
+    $(document).ready(function() {
+        $('#startRecord').click(function() {
+            $.ajax({
+                type: 'POST',
+                url: '/start_record',
+                success: function() {
+                    Swal.fire({
+                        title: 'Bonjour !',
+                        text: 'La séance est débutée',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $('#page2').show();
+                        $('#page1').hide();
+                        setTimeout(function() {
+                            $.ajax({
+                                type: 'POST',
+                                url: '/stop_record',
+                                success: function(response) {
+                                    Swal.fire({
+                                        title: 'À bientôt !',
+                                        text: 'La séance est terminée',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    }).then(() => {
+                                        $('#page2').hide();
+                                        $('#page3').show();
+                                        loadChart();
+                                        loadRes();
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Error stopping recording:', error);
+                                }
+                            });
+                        }, 60000); // Stop recording after 1 minute (60000 milliseconds)
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error starting recording:', error);
+                }
+            });
+        });
+    });
+
+    function loadChart() {
+        fetch('/chart')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('predict').insertAdjacentHTML("afterend", '<div id="donut-chart"></div>');
+                bb.generate({
+                    data: {
+                        columns: [
+                            ["Focus", data.Focus],
+                            ["NoFocus", data.NoFocus],
+                        ],
+                        type: "donut",
+                    },
+                    donut: {
+                        title: "Résultats de la Prédiction"
+                    },
+                    bindto: "#donut-chart",
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function loadRes() {
+
+    fetch('/res')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('res1').innerHTML = data[0];
+            document.getElementById('res2').innerHTML = data[1];
+            document.getElementById('res3').innerHTML = data[2];
+            document.getElementById('res4').innerHTML = data[3];
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>
+</body>
+</html>
